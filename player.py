@@ -39,19 +39,15 @@ def main():
         "/home/neha/12.mp3",
         "/home/neha/13.mp3",
         "/home/neha/14.mp3",
-        "/home/neha/15.mp3",
-        "/home/neha/16.mp3",
-        "/home/neha/17.mp3",
-        "/home/neha/18.mp3",
-        "/home/neha/19.mp3",
-        "/home/neha/20.mp3"
+        "/home/neha/15.mp3"
     ]
 
-    current_song = get_next_song(songs)
-    play_song(current_song)
+    playlist = list(songs)  # Create a copy of the original playlist
+    random.shuffle(playlist)  # Shuffle the playlist
 
+    current_song = None
+    playlist_index = 0
     is_paused = False
-    paused_song = None
     paused_time = 0.0
 
     while True:
@@ -60,35 +56,39 @@ def main():
             command = input().lower()
 
             if command == "pause":
-                if not is_paused:
+                if current_song and not is_paused:
                     pause_song()
                     is_paused = True
-                    paused_song = current_song
                     paused_time = pygame.mixer.music.get_pos() / 1000.0
             elif command == "resume":
-                if is_paused:
+                if current_song and is_paused:
                     resume_song()
                     is_paused = False
-                    if paused_song:
-                        current_song = paused_song
-                        paused_song = None
-                        play_song(current_song, paused_time)
+                    play_song(current_song, paused_time)
             elif command == "next":
                 stop_song()
-                current_song = get_next_song(songs)
+                playlist_index += 1
+                if playlist_index >= len(playlist):
+                    playlist_index = 0  # Start from the beginning of the playlist
+                current_song = playlist[playlist_index]
                 play_song(current_song)
                 is_paused = False
-                paused_song = None
                 paused_time = 0.0
             elif command == "quit":
                 stop_song()
                 break
 
         if not pygame.mixer.music.get_busy() and not is_paused:
-            current_song = get_next_song(songs)
+            playlist_index += 1
+            if playlist_index >= len(playlist):
+                playlist_index = 0  # Start from the beginning of the playlist
+            current_song = playlist[playlist_index]
             play_song(current_song)
+            is_paused = False
+            paused_time = 0.0
 
     pygame.quit()
 
 if __name__ == "__main__":
     main()
+
