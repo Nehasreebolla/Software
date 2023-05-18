@@ -39,7 +39,12 @@ def main():
         "/home/neha/12.mp3",
         "/home/neha/13.mp3",
         "/home/neha/14.mp3",
-        "/home/neha/15.mp3"
+        "/home/neha/15.mp3",
+        "/home/neha/16.mp3",
+        "/home/neha/17.mp3",
+        "/home/neha/18.mp3",
+        "/home/neha/19.mp3",
+        "/home/neha/20.mp3"
     ]
 
     playlist = list(songs)  # Create a copy of the original playlist
